@@ -12,7 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.astra.MainActivity;
+import com.example.astra.Navigation.MainActivity;
 import com.example.astra.R;
 import com.example.astra.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
