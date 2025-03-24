@@ -4,4 +4,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#2E8B57</color>
     <color name="blue">#0000FF</color>
+    <color name="cian">#E0FFFF</color>
+    <color name="red">#DC143C</color>
+    <color name="purple">#8A2BE2</color>
+    <color name="pastelPurple">#6A5ACD</color>
+    <color name="brown">#F5DEB3</color>
+    <color name="darkBrown">#8B4513</color>
+    <color name="experimental">#6B8E23</color>
 </resources>

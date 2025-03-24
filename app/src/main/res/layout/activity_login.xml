@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Auth.LoginActivity"
-    android:background="@color/white">
+    android:background="@color/cian">
 
 
     <TextView
@@ -17,6 +17,7 @@
         android:layout_marginTop="333dp"
         android:fontFamily="@font/ubuntu_medium"
         android:text="Вход"
+        android:textColor="@color/purple"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +81,7 @@
         android:layout_width="268dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/purple"
         android:text="Войти"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,24 +90,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         android:orientation="horizontal"
-        android:layout_marginTop="49dp"
-        app:layout_constraintTop_toBottomOf="@id/login_btn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/login_btn">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Впервые здесь?"/>
+            android:text="Впервые здесь?" />
 
         <TextView
             android:id="@+id/go_to_register_activity_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
             android:text="Зарегистрироваьтся"
-            android:textColor="@color/blue"
-            android:layout_marginStart="7dp"/>
+            android:textColor="@color/pastelPurple" />
 
 
     </LinearLayout>
