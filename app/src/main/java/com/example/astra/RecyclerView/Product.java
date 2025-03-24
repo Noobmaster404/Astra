@@ -1,4 +1,5 @@
 package com.example.astra.RecyclerView;
+//
 public class Product {
     private String name;
     private double price;
