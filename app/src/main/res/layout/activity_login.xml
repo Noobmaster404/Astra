@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Auth.LoginActivity"
-    android:background="@color/brown">
+    android:background="@color/cian">
 
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_marginTop="333dp"
         android:fontFamily="@font/ubuntu_medium"
         android:text="Вход"
-        android:textColor="@color/darkBrown"
+        android:textColor="@color/purple"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -81,7 +81,7 @@
         android:layout_width="268dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:backgroundTint="@color/darkBrown"
+        android:backgroundTint="@color/purple"
         android:text="Войти"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:text="Зарегистрироваьтся"
-            android:textColor="@color/experimental" />
+            android:textColor="@color/pastelPurple" />
 
 
     </LinearLayout>
