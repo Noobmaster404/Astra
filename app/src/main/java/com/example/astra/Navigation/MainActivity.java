@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.astra.R;
+import com.example.astra.RecyclerView.HomeFragment;
 import com.example.astra.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
