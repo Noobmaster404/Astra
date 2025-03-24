@@ -1,6 +1,10 @@
-package com.example.astra.RecyclerView;
+package com.example.astra.Navigation;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,18 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.example.astra.Navigation.Product;
+import com.example.astra.Navigation.ProductAdapter;
 import com.example.astra.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment {
                 .addOnFailureListener(e -> Log.e("FirebaseError", e.getMessage()));
     }
 }
-
 
 
 
