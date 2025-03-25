@@ -37,16 +37,12 @@ public class MainActivity extends AppCompatActivity {
         //Цифры, коорые находятся в case это id элементов, просто в цифровом представлении
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            switch (itemId){
-                case 1000018:
-                    replaceFragment(new HomeFragment());
-                    break;
-                case 1000019:
-                    replaceFragment(new CartFragment());
-                    break;
-                case 1000009:
-                    replaceFragment(new ProfileFragment());
-                    break;
+            if (itemId == R.id.nav_home){
+                replaceFragment(new HomeFragment());
+            } else if (itemId == R.id.nav_profile){
+                replaceFragment(new ProfileFragment());
+            } else if (itemId == R.id.nav_cart){
+                replaceFragment(new CartFragment());
             }
             return true;
         });
