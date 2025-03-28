@@ -56,6 +56,7 @@
             android:layout_marginStart="9dp"
             android:fontFamily="@font/ubuntu_light"
             android:hint="Email"
+            android:textColor="@color/black"
             android:textColorHint="@color/steel"/>
     </LinearLayout>
 
@@ -83,6 +84,7 @@
             android:layout_marginStart="9dp"
             android:fontFamily="@font/ubuntu_light"
             android:hint="Username"
+            android:textColor="@color/black"
             android:textColorHint="@color/steel"/>
     </LinearLayout>
 
@@ -111,6 +113,7 @@
             android:layout_marginStart="9dp"
             android:fontFamily="@font/ubuntu_light"
             android:hint="Password"
+            android:textColor="@color/black"
             android:textColorHint="@color/steel"
             android:inputType="textPassword"/>
     </LinearLayout>
