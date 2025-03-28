@@ -45,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
             android:fontFamily="@font/ubuntu_light"
-            android:hint="Email" />
+            android:hint="Email"
+            android:textColorHint="@color/steel"/>
     </LinearLayout>
 
 
@@ -73,6 +74,7 @@
             android:layout_marginStart="9dp"
             android:fontFamily="@font/ubuntu_light"
             android:hint="Password"
+            android:textColorHint="@color/steel"
             android:inputType="textPassword"/>
     </LinearLayout>
 
@@ -83,6 +85,7 @@
         android:layout_marginTop="50dp"
         android:backgroundTint="@color/purple"
         android:text="Войти"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_lin" />
@@ -99,7 +102,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Впервые здесь?" />
+            android:text="Впервые здесь?"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/go_to_register_activity_tv"
