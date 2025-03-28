@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -39,9 +41,10 @@ public class HomeFragment extends Fragment {
 
         // Привязываем элементы макета через view
         recyclerView = view.findViewById(R.id.recyclerViewProducts);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
         productList = new ArrayList<>();
         adapter = new ProductAdapter(requireContext(), productList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
 
         // Загрузка данных из Firebase Firestore
