@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         replaceFragment(new HomeFragment());//Относится к bottom navigation
 
-        //Цифры, коорые находятся в case это id элементов, просто в цифровом представлении
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home){
