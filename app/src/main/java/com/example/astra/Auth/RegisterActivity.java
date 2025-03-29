@@ -3,6 +3,7 @@ package com.example.astra.Auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -68,10 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         //Тут тоже возможно слишком глупо
-        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+        ImageButton back = (ImageButton)findViewById(R.id.back_btn);//
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                onBackPressed();
             }
         });
 
