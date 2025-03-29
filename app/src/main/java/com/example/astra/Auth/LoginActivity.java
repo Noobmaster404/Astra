@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 //Test
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,6 +28,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();//пока тестим
+
+
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
@@ -56,7 +64,20 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        //Тут я возможно слишком глупо сделал, но другого решения я не нашёл
+
+        //Это устойчивая авторизация
+        auth.addAuthStateListener(authListener -> {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user != null) {
+                // Если пользователь авторизован, перенаправляем его на главную активность
+                startActivity(new Intent(this, MainActivity.class));
+                finish(); // Закрываем LoginActivity
+            }
+        });
+
+
+
+
         binding.goToRegisterActivityTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

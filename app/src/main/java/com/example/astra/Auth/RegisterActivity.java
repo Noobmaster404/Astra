@@ -30,6 +30,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();//пока тестим
+
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
@@ -52,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                                 .setValue(userInfo);
                                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                        finish();//пока не точно
                                     }
                                 }
                             });
@@ -62,13 +68,18 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        //Тут тоже возможно слишком глупо
+        //Кнопка возвращает предыдущую страницу, а не создаёт новую
         ImageButton back = (ImageButton)findViewById(R.id.back_btn);//
         back.setOnClickListener(new View.OnClickListener() {
             @Override
