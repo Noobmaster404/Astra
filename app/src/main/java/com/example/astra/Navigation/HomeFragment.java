@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Product product = document.toObject(Product.class);
+                        product.setId(document.getId());
                         productList.add(product);
                         Log.d("Firebase", "Товар загружен: " + product.getName());
                     }
