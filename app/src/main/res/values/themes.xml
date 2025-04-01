@@ -1,9 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Базовые темы Material 3 -->
     <style name="Base.Theme.Astra" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Цвета -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryContainer">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Формы компонентов -->
+        <item name="shapeAppearanceMediumComponent">@style/Shape.Astra.Medium</item>
     </style>
 
+    <!-- Основная тема приложения -->
     <style name="Theme.Astra" parent="Base.Theme.Astra" />
+
+    <!-- Стиль для SplashScreen -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/SplashAnimations</item>
+    </style>
+
+    <style name="SplashAnimations">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+    <!-- Кастомные формы -->
+    <style name="Shape.Astra.Medium" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>

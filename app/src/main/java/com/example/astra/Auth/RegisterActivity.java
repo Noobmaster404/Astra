@@ -13,7 +13,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.astra.Navigation.MainActivity;
 import com.example.astra.R;
 import com.example.astra.databinding.ActivityRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,66 +26,84 @@ import java.util.HashMap;
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
+    private boolean isProcessing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();//пока тестим
-
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.emailEt.getText().toString().isEmpty() || binding.passwordEt.getText().toString().isEmpty() || binding.usernameEt.getText().toString().isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Поля логина, пароля и имени пользователя не могут быть пустыми", Toast.LENGTH_SHORT).show();
-                } else {
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(binding.emailEt.getText().toString(),binding.passwordEt.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        HashMap<String, String> userInfo = new HashMap<>();
-                                        userInfo.put("email", binding.emailEt.getText().toString());
-                                        userInfo.put("username", binding.usernameEt.getText().toString());
-                                        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(userInfo);
-                                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                                        finish();//пока не точно
-                                    }
-                                }
-                            });
+        binding.signUpBtn.setOnClickListener(v -> {
+            if (isProcessing) return;
 
-                }
+            String email = binding.emailEt.getText().toString().trim();
+            String password = binding.passwordEt.getText().toString().trim();
+            String username = binding.usernameEt.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
+                Toast.makeText(this,
+                        "Все поля должны быть заполнены",
+                        Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            setProcessing(true);
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            saveUserInfo(username, email);
+                        } else {
+                            setProcessing(false);
+                            Toast.makeText(this,
+                                    "Ошибка регистрации: " + task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
-
-
-
-
-
-
+        binding.backBtn.setOnClickListener(v -> onBackPressed());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
-        //Кнопка возвращает предыдущую страницу, а не создаёт новую
-        ImageButton back = (ImageButton)findViewById(R.id.back_btn);//
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+    private void saveUserInfo(String username, String email) {
+        HashMap<String, String> userInfo = new HashMap<>();
+        userInfo.put("email", email);
+        userInfo.put("username", username);
 
+        FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(userInfo)
+                .addOnCompleteListener(task -> {
+                    setProcessing(false);
+                    if (task.isSuccessful()) {
+                        navigateToMain();
+                    } else {
+                        Toast.makeText(this,
+                                "Ошибка сохранения данных",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void navigateToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void setProcessing(boolean processing) {
+        isProcessing = processing;
+        binding.signUpBtn.setEnabled(!processing);
+        binding.progressBar.setVisibility(processing ? View.VISIBLE : View.GONE);
     }
 }

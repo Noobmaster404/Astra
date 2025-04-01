@@ -12,7 +12,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.astra.Navigation.MainActivity;
 import com.example.astra.R;
 import com.example.astra.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,40 +20,58 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 //Test
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+    private boolean isProcessing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();//пока тестим
-
-
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.emailEt.getText().toString().isEmpty() || binding.passwordEt.getText().toString().isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Поля логина и пароля не могут быть пустыми", Toast.LENGTH_SHORT).show();
-                } else {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(binding.emailEt.getText().toString(), binding.passwordEt.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                    }
-                                }
-                            });
-                }
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        binding.loginBtn.setOnClickListener(v -> {
+            if (isProcessing) return;
+
+            String email = binding.emailEt.getText().toString().trim();
+            String password = binding.passwordEt.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Поля логина и пароля не могут быть пустыми", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            setProcessing(true);
+
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        setProcessing(false);
+
+                        if (task.isSuccessful()) {
+                            navigateToMain();
+                        } else {
+                            Toast.makeText(this, "Ошибка входа: " +
+                                            Objects.requireNonNull(task.getException()).getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+
+        binding.goToRegisterActivityTv.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
+        });
+
+        // Устойчивая авторизация
+        auth.addAuthStateListener(authListener -> {
+            if (auth.getCurrentUser() != null && !isFinishing()) {
+                navigateToMain();
             }
         });
 
@@ -63,27 +80,18 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
+    private void navigateToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 
-        //Это устойчивая авторизация
-        auth.addAuthStateListener(authListener -> {
-            FirebaseUser user = auth.getCurrentUser();
-            if (user != null) {
-                // Если пользователь авторизован, перенаправляем его на главную активность
-                startActivity(new Intent(this, MainActivity.class));
-                finish(); // Закрываем LoginActivity
-            }
-        });
-
-
-
-
-        binding.goToRegisterActivityTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
-
+    private void setProcessing(boolean processing) {
+        isProcessing = processing;
+        binding.loginBtn.setEnabled(!processing);
+        binding.progressBar.setVisibility(processing ? View.VISIBLE : View.GONE);
     }
 }

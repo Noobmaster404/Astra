@@ -14,25 +14,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Astra"
         tools:targetApi="31">
+
+        <!-- Новая точка входа (SplashActivity) -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+        android:theme="@style/SplashTheme"
+        android:excludeFromRecents="true"
+        android:taskAffinity="">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+        <!-- Перенесите фильтр intent из LoginActivity сюда -->
+        <activity
+            android:name=".Auth.LoginActivity"
+            android:exported="true" />
+
+        <!-- Остальные активности -->
         <activity
             android:name=".Auth.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".Navigation.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Auth.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".Auth.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTask"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>
