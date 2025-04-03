@@ -92,6 +92,6 @@ public class LoginActivity extends AppCompatActivity {
     private void setProcessing(boolean processing) {
         isProcessing = processing;
         binding.loginBtn.setEnabled(!processing);
-        binding.progressBar.setVisibility(processing ? View.VISIBLE : View.GONE);
+        binding.progressBar.setVisibility(processing ? View.INVISIBLE : View.GONE);//в этой строке я сделал progressBar невидимым
     }
 }
