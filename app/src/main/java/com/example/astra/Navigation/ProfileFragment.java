@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.astra.Auth.LoginActivity;
 import com.example.astra.R;
@@ -21,7 +22,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button btnLogout = view.findViewById(R.id.btnLogout);
+        ImageButton btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> signOut());
 
         return view;

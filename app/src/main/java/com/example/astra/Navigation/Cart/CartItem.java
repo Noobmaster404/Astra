@@ -1,4 +1,4 @@
-package com.example.astra.Navigation;
+package com.example.astra.Navigation.Cart;
 
 public class CartItem {
 

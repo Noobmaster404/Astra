@@ -1,10 +1,11 @@
-package com.example.astra.Navigation;
+package com.example.astra.Navigation.Cart;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textViewName, textViewPrice, textViewQuantity;
-        Button buttonRemove;
+        ImageButton buttonRemove;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);

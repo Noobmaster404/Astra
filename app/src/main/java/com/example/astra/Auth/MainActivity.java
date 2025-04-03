@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.astra.Navigation.CartFragment;
+import com.example.astra.Navigation.Cart.CartFragment;
 import com.example.astra.Navigation.HomeFragment;
 import com.example.astra.Navigation.ProfileFragment;
 import com.example.astra.R;

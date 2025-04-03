@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.textViewName.setText(product.getName());
-        holder.textViewPrice.setText("Цена: " + product.getPrice() + " $");
+        holder.textViewPrice.setText(product.getPrice() + " $");
         Glide.with(context).load(product.getImageUrl()).into(holder.imageView);
 
         // Обработчик кнопки добавления в корзину
@@ -58,7 +59,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName, textViewPrice;
         ImageView imageView;
-        Button buttonAddToCart; // Добавьте эту кнопку в ваш product_item.xml
+        ImageButton buttonAddToCart; // Добавьте эту кнопку в ваш product_item.xml
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
