@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.astra.Auth.LoginActivity;
 import com.example.astra.Auth.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
 
         // Задержка для отображения splash screen (2 секунды)
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
