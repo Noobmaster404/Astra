@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.astra.Navigation.Cart.CartFragment;
 import com.example.astra.Navigation.HomeFragment;
 import com.example.astra.Navigation.ProfileFragment;
+import com.example.astra.Navigation.SearchFragment;
 import com.example.astra.R;
 import com.example.astra.databinding.ActivityMainBinding;
 
@@ -24,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
+        //Из-за edgeToEdge у меня неправильно работал navigation bar
+        //EdgeToEdge.enable(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());//Относится к bottom navigation
         setContentView(binding.getRoot());
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new ProfileFragment());
             } else if (itemId == R.id.nav_cart){
                 replaceFragment(new CartFragment());
+            } else if (itemId == R.id.nav_search){
+                replaceFragment(new SearchFragment());
             }
             return true;
         });
