@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -35,6 +37,14 @@ public class HomeFragment extends Fragment {
     private List<Product> filteredList;
     private SearchView searchView;
     private FloatingActionButton fabFilter;
+
+    // Константы для сортировки
+    private static final int SORT_DEFAULT = 0;
+    private static final int SORT_NAME_ASC = 1;
+    private static final int SORT_NAME_DESC = 2;
+    private static final int SORT_PRICE_ASC = 3;
+    private static final int SORT_PRICE_DESC = 4;
+    private int currentSortType = SORT_DEFAULT;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,14 +77,14 @@ public class HomeFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                filterProducts(query);
-                return false;
+                applyFilters();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterProducts(newText);
-                return false;
+                applyFilters();
+                return true;
             }
         });
     }
@@ -94,72 +104,93 @@ public class HomeFragment extends Fragment {
                         product.setId(document.getId());
                         productList.add(product);
                     }
-                    filteredList.addAll(productList);
-                    adapter.notifyDataSetChanged();
+                    applyFilters();
                 })
-                .addOnFailureListener(e -> Log.e("FirebaseError", e.getMessage()));
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseError", e.getMessage());
+                    Toast.makeText(requireContext(), "Ошибка загрузки товаров", Toast.LENGTH_SHORT).show();
+                });
     }
 
-    private void filterProducts(String query) {
-        filteredList.clear();
-        if (query.isEmpty()) {
-            filteredList.addAll(productList);
-        } else {
-            String lowerCaseQuery = query.toLowerCase();
-            for (Product product : productList) {
-                if (product.getName().toLowerCase().contains(lowerCaseQuery)) {
-                    filteredList.add(product);
-                }
-            }
-        }
-        adapter.updateList(filteredList);
-    }
-
-    private void filterByPrice(double minPrice, double maxPrice) {
-        filteredList.clear();
-        for (Product product : productList) {
-            if (product.getPrice() >= minPrice && product.getPrice() <= maxPrice) {
-                filteredList.add(product);
-            }
-        }
-        adapter.updateList(filteredList);
-    }
-
-    private void resetFilters() {
+    private void applyFilters() {
         filteredList.clear();
         filteredList.addAll(productList);
+
+        // Применяем поиск по названию
+        String query = searchView.getQuery().toString().toLowerCase();
+        if (!query.isEmpty()) {
+            filteredList.removeIf(product -> !product.getName().toLowerCase().contains(query));
+        }
+
+        // Применяем сортировку
+        applySorting();
+
         adapter.updateList(filteredList);
-        searchView.setQuery("", false);
+    }
+
+    private void applySorting() {
+        switch (currentSortType) {
+            case SORT_NAME_ASC:
+                Collections.sort(filteredList, (p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
+                break;
+            case SORT_NAME_DESC:
+                Collections.sort(filteredList, (p1, p2) -> p2.getName().compareToIgnoreCase(p1.getName()));
+                break;
+            case SORT_PRICE_ASC:
+                Collections.sort(filteredList, (p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+                break;
+            case SORT_PRICE_DESC:
+                Collections.sort(filteredList, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
+                break;
+            case SORT_DEFAULT:
+            default:
+                // Без сортировки
+                break;
+        }
     }
 
     private void showFilterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Фильтр товаров");
+        builder.setTitle("Сортировка товаров");
 
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null);
-        EditText etMinPrice = view.findViewById(R.id.etMinPrice);
-        EditText etMaxPrice = view.findViewById(R.id.etMaxPrice);
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+        radioGroup.check(getRadioButtonIdForSortType());
 
         builder.setView(view);
         builder.setPositiveButton("Применить", (dialog, which) -> {
-            try {
-                double minPrice = etMinPrice.getText().toString().isEmpty() ? 0 :
-                        Double.parseDouble(etMinPrice.getText().toString());
-                double maxPrice = etMaxPrice.getText().toString().isEmpty() ? Double.MAX_VALUE :
-                        Double.parseDouble(etMaxPrice.getText().toString());
-
-                if (minPrice > maxPrice) {
-                    Toast.makeText(requireContext(), "Минимальная цена не может быть больше максимальной", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                filterByPrice(minPrice, maxPrice);
-            } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Введите корректные значения", Toast.LENGTH_SHORT).show();
+            int checkedId = radioGroup.getCheckedRadioButtonId();
+            if (checkedId == R.id.rbNameAsc) {
+                currentSortType = SORT_NAME_ASC;
+            } else if (checkedId == R.id.rbNameDesc) {
+                currentSortType = SORT_NAME_DESC;
+            } else if (checkedId == R.id.rbPriceAsc) {
+                currentSortType = SORT_PRICE_ASC;
+            } else if (checkedId == R.id.rbPriceDesc) {
+                currentSortType = SORT_PRICE_DESC;
+            } else {
+                currentSortType = SORT_DEFAULT;
             }
+            applyFilters();
         });
-        builder.setNegativeButton("Сбросить", (dialog, which) -> resetFilters());
+
+        builder.setNegativeButton("Сбросить", (dialog, which) -> {
+            currentSortType = SORT_DEFAULT;
+            searchView.setQuery("", false);
+            applyFilters();
+        });
+
         builder.setNeutralButton("Отмена", null);
         builder.show();
+    }
+
+    private int getRadioButtonIdForSortType() {
+        switch (currentSortType) {
+            case SORT_NAME_ASC: return R.id.rbNameAsc;
+            case SORT_NAME_DESC: return R.id.rbNameDesc;
+            case SORT_PRICE_ASC: return R.id.rbPriceAsc;
+            case SORT_PRICE_DESC: return R.id.rbPriceDesc;
+            default: return R.id.rbDefault;
+        }
     }
 }

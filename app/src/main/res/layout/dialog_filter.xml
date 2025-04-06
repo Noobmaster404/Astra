@@ -8,38 +8,45 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ценовой диапазон"
+        android:text="Сортировка товаров"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_marginTop="8dp">
 
-        <EditText
-            android:id="@+id/etMinPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Мин. цена"
-            android:inputType="numberDecimal"/>
-
-        <TextView
+        <RadioButton
+            android:id="@+id/rbDefault"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="8dp"/>
+            android:text="По умолчанию"/>
 
-        <EditText
-            android:id="@+id/etMaxPrice"
-            android:layout_width="0dp"
+        <RadioButton
+            android:id="@+id/rbNameAsc"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Макс. цена"
-            android:inputType="numberDecimal"/>
-    </LinearLayout>
+            android:text="По имени (A-Z)"/>
+
+        <RadioButton
+            android:id="@+id/rbNameDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="По имени (Z-A)"/>
+
+        <RadioButton
+            android:id="@+id/rbPriceAsc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="По цене (дешевле → дороже)"/>
+
+        <RadioButton
+            android:id="@+id/rbPriceDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="По цене (дороже → дешевле)"/>
+    </RadioGroup>
 </LinearLayout>
