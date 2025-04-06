@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cian"
+    android:background="@color/lightBrown"
     tools:context=".Navigation.ProfileFragment">
 
 
@@ -18,7 +18,7 @@
         android:layout_gravity="left"
         android:onClick="onLogoutClick"
         android:src="@drawable/logout_icon"
-        android:backgroundTint="@color/cian"/>
+        android:backgroundTint="@color/lightBrown"/>
 
     <ImageView
         android:id="@+id/profile_image"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Auth.MainActivity"
-    android:background="@color/cian">
+    android:background="@color/lightBrown">
 
     <FrameLayout
         android:id="@+id/frame_layout"
@@ -42,11 +42,11 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/steel"
+            android:background="@color/blueLight"
             android:fontFamily="@font/ubuntu_medium"
             app:itemIconTint="@android:color/background_dark"
             app:labelVisibilityMode="unlabeled"
-            app:itemRippleColor="@color/cian"
+            app:itemRippleColor="@color/lightBrown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
