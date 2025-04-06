@@ -44,10 +44,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.textViewName.setText(product.getName());
-        holder.textViewPrice.setText(product.getPrice() + " $");
+        holder.textViewPrice.setText(String.format("%.2f $", product.getPrice()));
         Glide.with(context).load(product.getImageUrl()).into(holder.imageView);
 
-        // Обработчик кнопки добавления в корзину
         holder.buttonAddToCart.setOnClickListener(v -> addToCart(product));
     }
 
@@ -56,17 +55,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return productList.size();
     }
 
+    public void updateList(List<Product> newList) {
+        productList = newList;
+        notifyDataSetChanged();
+    }
+
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName, textViewPrice;
         ImageView imageView;
-        ImageButton buttonAddToCart; // Добавьте эту кнопку в ваш product_item.xml
+        ImageButton buttonAddToCart;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewPrice = itemView.findViewById(R.id.textViewPrice);
             imageView = itemView.findViewById(R.id.imageViewProduct);
-            buttonAddToCart = itemView.findViewById(R.id.buttonAddToCart); // Инициализация кнопки
+            buttonAddToCart = itemView.findViewById(R.id.buttonAddToCart);
         }
     }
 
@@ -79,19 +83,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             return;
         }
 
-        // Проверяем, есть ли товар уже в корзине
         db.collection("users")
                 .document(user.getUid())
                 .collection("cart")
-                .document(product.getId()) // Используем имя как ID (лучше добавить id в Product)
+                .document(product.getId())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        // Товар уже есть - увеличиваем количество
                         int currentQuantity = documentSnapshot.getLong("quantity").intValue();
                         updateCartItem(user.getUid(), product.getId(), currentQuantity + 1);
                     } else {
-                        // Товара нет - создаем новую запись
                         createNewCartItem(user.getUid(), product);
                     }
                 });
@@ -101,7 +102,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> cartItem = new HashMap<>();
-        cartItem.put("productId", product.getId()); // Лучше использовать уникальный ID
+        cartItem.put("productId", product.getId());
         cartItem.put("name", product.getName());
         cartItem.put("price", product.getPrice());
         cartItem.put("imageUrl", product.getImageUrl());
