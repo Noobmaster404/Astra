@@ -104,6 +104,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void setProcessing(boolean processing) {
         isProcessing = processing;
         binding.signUpBtn.setEnabled(!processing);
-        binding.progressBar.setVisibility(processing ? View.VISIBLE : View.GONE);
+        binding.progressBar.setVisibility(processing ? View.INVISIBLE : View.GONE);
     }
 }
