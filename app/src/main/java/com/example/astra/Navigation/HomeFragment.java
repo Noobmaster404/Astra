@@ -1,170 +1,66 @@
 package com.example.astra.Navigation;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.SearchView;
-import android.widget.Toast;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.astra.Navigation.Product;
-import com.example.astra.Navigation.ProductAdapter;
 import com.example.astra.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link HomeFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class HomeFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private ProductAdapter adapter;
-    private List<Product> productList;
-    private List<Product> filteredList;
-    private FloatingActionButton fabFilter;
 
-    // Константы для сортировки
-    private static final int SORT_DEFAULT = 0;
-    private static final int SORT_NAME_ASC = 1;
-    private static final int SORT_NAME_DESC = 2;
-    private static final int SORT_PRICE_ASC = 3;
-    private static final int SORT_PRICE_DESC = 4;
-    private int currentSortType = SORT_DEFAULT;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
-        recyclerView = view.findViewById(R.id.recyclerViewProducts);
-        fabFilter = view.findViewById(R.id.fabFilter);
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
-        return view;
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SearchFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        productList = new ArrayList<>();
-        filteredList = new ArrayList<>();
-
-        adapter = new ProductAdapter(requireContext(), filteredList);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(adapter);
-
-
-        setupFilterButton();
-        loadProducts();
-    }
-
-
-    private void setupFilterButton() {
-        fabFilter.setOnClickListener(v -> showFilterDialog());
-    }
-
-    private void loadProducts() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("products")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    productList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Product product = document.toObject(Product.class);
-                        product.setId(document.getId());
-                        productList.add(product);
-                    }
-                    applyFilters();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("FirebaseError", e.getMessage());
-                    Toast.makeText(requireContext(), "Ошибка загрузки товаров", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void applyFilters() {
-        filteredList.clear();
-        filteredList.addAll(productList);
-
-
-        // Применяем сортировку
-        applySorting();
-
-        adapter.updateList(filteredList);
-    }
-
-    private void applySorting() {
-        switch (currentSortType) {
-            case SORT_NAME_ASC:
-                Collections.sort(filteredList, (p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
-                break;
-            case SORT_NAME_DESC:
-                Collections.sort(filteredList, (p1, p2) -> p2.getName().compareToIgnoreCase(p1.getName()));
-                break;
-            case SORT_PRICE_DESC:
-                Collections.sort(filteredList, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
-                break;
-            case SORT_DEFAULT:
-            default:
-                // Без сортировки
-                break;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
-    private void showFilterDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Сортировка товаров");
-
-        View view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null);
-        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
-        radioGroup.check(getRadioButtonIdForSortType());
-
-        builder.setView(view);
-        builder.setPositiveButton("Применить", (dialog, which) -> {
-            int checkedId = radioGroup.getCheckedRadioButtonId();
-            if (checkedId == R.id.rbNameAsc) {
-                currentSortType = SORT_NAME_ASC;
-            } else if (checkedId == R.id.rbNameDesc) {
-                currentSortType = SORT_NAME_DESC;
-            } else if (checkedId == R.id.rbPriceAsc) {
-                currentSortType = SORT_PRICE_ASC;
-            } else if (checkedId == R.id.rbPriceDesc) {
-                currentSortType = SORT_PRICE_DESC;
-            } else {
-                currentSortType = SORT_DEFAULT;
-            }
-            applyFilters();
-        });
-
-        builder.setNegativeButton("Сбросить", (dialog, which) -> {
-            currentSortType = SORT_DEFAULT;
-            applyFilters();
-        });
-
-        builder.setNeutralButton("Отмена", null);
-        builder.show();
-    }
-
-    private int getRadioButtonIdForSortType() {
-        switch (currentSortType) {
-            case SORT_NAME_ASC: return R.id.rbNameAsc;
-            case SORT_NAME_DESC: return R.id.rbNameDesc;
-            case SORT_PRICE_ASC: return R.id.rbPriceAsc;
-            case SORT_PRICE_DESC: return R.id.rbPriceDesc;
-            default: return R.id.rbDefault;
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

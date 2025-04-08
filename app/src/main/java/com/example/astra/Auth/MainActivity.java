@@ -2,7 +2,6 @@ package com.example.astra.Auth;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -12,9 +11,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.astra.Navigation.Cart.CartFragment;
-import com.example.astra.Navigation.HomeFragment;
+import com.example.astra.Navigation.CatalogFragment;
 import com.example.astra.Navigation.ProfileFragment;
-import com.example.astra.Navigation.SearchFragment;
+import com.example.astra.Navigation.HomeFragment;
 import com.example.astra.R;
 import com.example.astra.databinding.ActivityMainBinding;
 
@@ -48,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new ProfileFragment());
             } else if (itemId == R.id.nav_cart){
                 replaceFragment(new CartFragment());
-            } else if (itemId == R.id.nav_search){
-                replaceFragment(new SearchFragment());
+            } else if (itemId == R.id.nav_catalog){
+                replaceFragment(new CatalogFragment());
             }
             return true;
         });
