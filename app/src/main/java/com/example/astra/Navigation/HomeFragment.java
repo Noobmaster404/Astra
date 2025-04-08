@@ -35,7 +35,6 @@ public class HomeFragment extends Fragment {
     private ProductAdapter adapter;
     private List<Product> productList;
     private List<Product> filteredList;
-    private SearchView searchView;
     private FloatingActionButton fabFilter;
 
     // Константы для сортировки
@@ -50,7 +49,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        searchView = view.findViewById(R.id.searchView);
         recyclerView = view.findViewById(R.id.recyclerViewProducts);
         fabFilter = view.findViewById(R.id.fabFilter);
 
@@ -68,26 +66,11 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(adapter);
 
-        setupSearchView();
+
         setupFilterButton();
         loadProducts();
     }
 
-    private void setupSearchView() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                applyFilters();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilters();
-                return true;
-            }
-        });
-    }
 
     private void setupFilterButton() {
         fabFilter.setOnClickListener(v -> showFilterDialog());
@@ -116,11 +99,6 @@ public class HomeFragment extends Fragment {
         filteredList.clear();
         filteredList.addAll(productList);
 
-        // Применяем поиск по названию
-        String query = searchView.getQuery().toString().toLowerCase();
-        if (!query.isEmpty()) {
-            filteredList.removeIf(product -> !product.getName().toLowerCase().contains(query));
-        }
 
         // Применяем сортировку
         applySorting();
@@ -135,9 +113,6 @@ public class HomeFragment extends Fragment {
                 break;
             case SORT_NAME_DESC:
                 Collections.sort(filteredList, (p1, p2) -> p2.getName().compareToIgnoreCase(p1.getName()));
-                break;
-            case SORT_PRICE_ASC:
-                Collections.sort(filteredList, (p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
                 break;
             case SORT_PRICE_DESC:
                 Collections.sort(filteredList, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
@@ -176,7 +151,6 @@ public class HomeFragment extends Fragment {
 
         builder.setNegativeButton("Сбросить", (dialog, which) -> {
             currentSortType = SORT_DEFAULT;
-            searchView.setQuery("", false);
             applyFilters();
         });
 
