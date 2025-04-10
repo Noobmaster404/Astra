@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/blueLight"
+            android:background="@color/steel"
             android:fontFamily="@font/ubuntu_medium"
             app:itemIconTint="@android:color/background_dark"
             app:labelVisibilityMode="unlabeled"

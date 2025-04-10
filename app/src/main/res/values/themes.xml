@@ -2,7 +2,7 @@
     <!-- Базовые темы Material 3 -->
     <style name="Base.Theme.Astra" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Цвета -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/lightBrown</item>
         <item name="colorPrimaryContainer">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
 
